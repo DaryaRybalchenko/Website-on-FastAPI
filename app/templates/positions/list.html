@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="toolbar">
+  <h2>Справочник должности</h2>
+  <a class="btn" href="/positions/create">Создать</a>
+</div>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Название</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for item in positions %}
+    <tr>
+      <td>{{ item.id }}</td>
+      <td>{{ item.name }}</td>
+      <td>
+        <a href="/positions/{{ item.id }}/edit">✏️</a>
+        <a href="/positions/{{ item.id }}/delete">🗑️</a>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

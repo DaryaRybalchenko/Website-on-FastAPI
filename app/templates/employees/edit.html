@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Редактировать сотрудника #{{ item.id }}</h2>
+<form method="post">
+  <label>Фамилия<input name="last_name" value="{{ item.last_name }}" required></label>
+  <label>Имя<input name="first_name" value="{{ item.first_name }}" required></label>
+  <label>Отчество<input name="middle_name" value="{{ item.middle_name }}"></label>
+
+  <!-- Должность как select -->
+  <label>Должность
+    <select name="post_id" required>
+      {% for position in positions %}
+        <option value="{{ position.id }}" {% if item.post_id == position.id %}selected{% endif %}>
+          {{ position.name }}
+        </option>
+      {% endfor %}
+    </select>
+  </label>
+
+  <label>Серия паспорта<input name="passport_series" value="{{ item.passport_series }}" required></label>
+  <label>Номер паспорта<input name="passport_number" value="{{ item.passport_number }}" required></label>
+  <label>Кем выдан<input name="passport_issued_by" value="{{ item.passport_issued_by }}" required></label>
+  <label>Дата выдачи<input type="date" name="passport_date_of_issue" value="{{ item.passport_date_of_issue }}" required></label>
+
+  <div><button class="btn" type="submit">Сохранить</button></div>
+</form>
+{% endblock %}

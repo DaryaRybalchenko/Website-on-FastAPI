@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Удалить отдел</h2>
+<p>Вы уверены, что хотите удалить «{{ item.name }}» (#{{ item.id }})?</p>
+<form method="post">
+  <button class="btn danger" type="submit">Удалить</button>
+</form>
+{% endblock %}

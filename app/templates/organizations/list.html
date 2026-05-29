@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="toolbar">
+  <h2>Справочник организации</h2>
+  <a class="btn" href="/organizations/create">Создать</a>
+</div>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Название</th>
+      <th>Адрес</th>
+      <th>Счёт</th>
+      <th>Руководитель</th>
+      <th>Гл. бухгалтер</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for item in organizations %}
+    <tr>
+      <td>{{ item.id }}</td>
+      <td>{{ item.name }}</td>
+      <td>{{ item.address }}</td>
+      <td>
+        {% if item.account %}
+          {{ item.account.bank_name }} — {{ item.account.account }} (БИК {{ item.account.bank_identity_number }})
+        {% else %}
+          —
+        {% endif %}
+      </td>
+      <td>{{ item.chief }}</td>
+      <td>{{ item.financial_chief }}</td>
+      <td>
+        <a href="/organizations/{{ item.id }}/edit">✏️</a>
+        <a href="/organizations/{{ item.id }}/delete">🗑️</a>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

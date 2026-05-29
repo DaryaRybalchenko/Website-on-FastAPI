@@ -1,0 +1,45 @@
+select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #27425f;
+  background: #0f1c29;
+  color: var(--text);
+  appearance: none; /* убираем дефолтные стрелки в браузерах */
+}
+select:focus {
+  outline: 2px solid var(--accent);
+}
+
+:root{
+  --bg: #0b1623;
+  --card: #101e2c;
+  --text: #e9f2ff;
+  --accent: #78a6ff;
+  --danger: #ff6b6b;
+  --muted: #9fb3c8;
+}
+*{box-sizing:border-box;font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, 'Helvetica Neue', Arial}
+body{margin:0;background:var(--bg);color:var(--text)}
+a{color:var(--accent);text-decoration:none}
+header{padding:16px 0;background:linear-gradient(90deg,#0b1e33,#0b1623);border-bottom:1px solid #0f253d}
+header .container{display:flex;gap:24px;align-items:center;justify-content:space-between}
+nav a{margin-right:12px}
+.container{max-width:1100px;margin:0 auto;padding:0 16px}
+.toolbar{margin:16px 0}
+.btn{background:var(--accent);color:#00122a;padding:8px 14px;border-radius:10px;border:none;display:inline-block}
+.btn.danger{background:var(--danger);color:#fff}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:12px;overflow:hidden}
+th,td{padding:10px;border-bottom:1px solid #1e3248}
+th{text-align:left;color:var(--muted);font-weight:600;background:#0f1c29}
+tr:hover{background:#102236}
+label{display:block;margin:8px 0}
+input{width:100%;padding:8px;border-radius:10px;border:1px solid #27425f;background:#0f1c29;color:var(--text)}
+h1,h2,h3{margin:12px 0}
+.muted{color:var(--muted)}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px 16px;
+}

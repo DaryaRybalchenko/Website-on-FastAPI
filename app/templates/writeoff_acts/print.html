@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Акт списания основных средств №{{ act.act_number }} от {{ act.act_date|rusdate }}</title>
+  <link rel="stylesheet" href="/static/css/print.css">
+  <style>
+    .header-info {
+      text-align: center;
+      margin-bottom: 10mm;
+    }
+    .commission-info {
+      margin: 5mm 0;
+      padding: 3mm;
+      border: 1px solid #000;
+    }
+    .signature-block {
+      margin-top: 8mm;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10mm;
+    }
+    .signature-line {
+      border-top: 1px solid #000;
+      margin-top: 15mm;
+      position: relative;
+    }
+    .signature-name {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      padding: 0 5px;
+    }
+    .total-row {
+      font-weight: bold;
+      background-color: #f5f5f5;
+    }
+  </style>
+</head>
+<body>
+  <div class="screen-toolbar">
+    <a class="btn" href="javascript:window.print()">Печать</a>
+    <a class="btn" href="/writeoff-acts">Назад к списку</a>
+  </div>
+
+  <div class="container-doc">
+    <div class="header-info">
+      <h1>АКТ СПИСАНИЯ ОСНОВНЫХ СРЕДСТВ</h1>
+      <p>№ {{ act.act_number }} от {{ act.act_date|rusdate }} г.</p>
+    </div>
+
+    <div class="commission-info">
+      <p><strong>Комиссия в составе:</strong></p>
+      <p><strong>Председатель:</strong> {{ act.commission_chairman.last_name }} {{ act.commission_chairman.first_name }} {{ act.commission_chairman.middle_name or '' }}</p>
+      <p><strong>Члены комиссии:</strong></p>
+      <p>1. {{ act.commission_member1.last_name }} {{ act.commission_member1.first_name }} {{ act.commission_member1.middle_name or '' }}</p>
+      {% if act.commission_member2 %}
+      <p>2. {{ act.commission_member2.last_name }} {{ act.commission_member2.first_name }} {{ act.commission_member2.middle_name or '' }}</p>
+      {% endif %}
+      {% if act.commission_member3 %}
+      <p>3. {{ act.commission_member3.last_name }} {{ act.commission_member3.first_name }} {{ act.commission_member3.middle_name or '' }}</p>
+      {% endif %}
+    </div>
+
+    <p>На основании осмотра и технической экспертизы комиссия установила, что следующие основные средства подлежат списанию:</p>
+
+    <table class="table" style="width:100%; border-collapse:collapse; font-size:11px; margin-top:5mm;">
+      <thead>
+        <tr>
+          <th style="border:1px solid #000; text-align:center; width:8mm;">№</th>
+          <th style="border:1px solid #000; text-align:center;">Наименование основного средства</th>
+          <th style="border:1px solid #000; text-align:center; width:15mm;">Инвентарный номер</th>
+          <th style="border:1px solid #000; text-align:center; width:15mm;">Дата ввода в эксплуатацию</th>
+          <th style="border:1px solid #000; text-align:center; width:15mm;">Первоначальная стоимость, руб.</th>
+          <th style="border:1px solid #000; text-align:center; width:12mm;">Срок службы, мес.</th>
+          <th style="border:1px solid #000; text-align:center; width:12mm;">Факт. срок экспл., мес.</th>
+          <th style="border:1px solid #000; text-align:center; width:15mm;">Остаточная стоимость, руб.</th>
+          <th style="border:1px solid #000; text-align:center;">Причина списания</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in act.items %}
+        <tr>
+          <td style="border:1px solid #000; text-align:center;">{{ loop.index }}</td>
+          <td style="border:1px solid #000;">{{ item.product.name }}</td>
+          <td style="border:1px solid #000; text-align:center;">{{ item.inventory_number }}</td>
+          <td style="border:1px solid #000; text-align:center;">{{ item.commissioning_date|rusdate }}</td>
+          <td style="border:1px solid #000; text-align:right;">{{ "%.2f"|format(item.initial_cost) }}</td>
+          <td style="border:1px solid #000; text-align:center;">{{ item.useful_life }}</td>
+          <td style="border:1px solid #000; text-align:center;">{{ item.actual_life }}</td>
+          <td style="border:1px solid #000; text-align:right;">{{ "%.2f"|format(item.residual_value) }}</td>
+          <td style="border:1px solid #000;">{{ item.item_reason or '—' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr class="total-row">
+          <td colspan="4" style="border:1px solid #000; text-align:right;"><strong>Итого:</strong></td>
+          <td style="border:1px solid #000; text-align:right;"><strong>{{ "%.2f"|format(act.items|sum(attribute='initial_cost')) }}</strong></td>
+          <td colspan="2" style="border:1px solid #000;"></td>
+          <td style="border:1px solid #000; text-align:right;"><strong>{{ "%.2f"|format(act.items|sum(attribute='residual_value')) }}</strong></td>
+          <td style="border:1px solid #000;"></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <div class="signature-block">
+      <div>
+        <div class="signature-line">
+          <div class="signature-name">Председатель комиссии</div>
+        </div>
+        <p style="text-align:center; margin-top:20px;">
+          {{ act.commission_chairman.last_name }} {{ act.commission_chairman.first_name }} {{ act.commission_chairman.middle_name or '' }}
+        </p>
+      </div>
+      
+      <div>
+        <div class="signature-line">
+          <div class="signature-name">Члены комиссии</div>
+        </div>
+        <p style="text-align:center; margin-top:20px;">
+          {{ act.commission_member1.last_name }} {{ act.commission_member1.first_name }} {{ act.commission_member1.middle_name or '' }}<br>
+          {% if act.commission_member2 %}
+          {{ act.commission_member2.last_name }} {{ act.commission_member2.first_name }} {{ act.commission_member2.middle_name or '' }}<br>
+          {% endif %}
+          {% if act.commission_member3 %}
+          {{ act.commission_member3.last_name }} {{ act.commission_member3.first_name }} {{ act.commission_member3.middle_name or '' }}
+          {% endif %}
+        </p>
+      </div>
+    </div>
+
+    <p style="margin-top: 15mm; text-align: center;">
+      Акт составлен в ________ экземплярах<br>
+      1-й экземпляр - бухгалтерии<br>
+      2-й экземпляр - подразделению
+    </p>
+  </div>
+</body>
+</html>

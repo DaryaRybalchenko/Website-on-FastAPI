@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Доверенность №{{ proxy.id }} от {{ proxy.date_of_issue|rusdate }}</title>
+  <link rel="stylesheet" href="/static/css/print.css">
+</head>
+<body>
+  <!-- Панель только на экране -->
+  <div class="screen-toolbar">
+    <a class="btn" href="javascript:window.print()">Печать</a>
+    <a class="btn" href="/proxies">Назад к списку</a>
+  </div>
+
+  <div class="container-doc">
+    <div class="doc-title">Доверенность №{{ proxy.id }}</div>
+
+    <div class="meta-grid">
+      <div>
+        <label>Организация:</label>
+        <div class="value" style="min-width:auto">{{ proxy.organization.name }}</div>
+      </div>
+      <div>
+        <label>Дата выдачи:</label>
+        <div class="value">{{ proxy.date_of_issue|rusdate }}</div>
+      </div>
+
+      <div>
+        <label>Адрес:</label>
+        <div class="value" style="min-width: 100%">{{ proxy.organization.address }}</div>
+      </div>
+      <div>
+        <label>Действительна до:</label>
+        <div class="value">{{ proxy.is_valid_until|rusdate }}</div>
+      </div>
+
+      <div>
+        <label>Счёт / Банк:</label>
+        <div class="value" style="min-width: 100%">
+          {% if proxy.organization.account %}
+            {{ proxy.organization.account.account }},
+            {{ proxy.organization.account.bank_name }},
+            БИК {{ proxy.organization.account.bank_identity_number }}
+          {% else %}
+            —
+          {% endif %}
+        </div>
+      </div>
+      <div>
+        <label>Контрагент:</label>
+        <div class="value" style="min-width:auto">{{ proxy.customer.name }}</div>
+      </div>
+    </div>
+
+    <p>
+      Настоящей доверенностью <b>{{ proxy.organization.name }}</b> уполномочивает
+      <b>{{ proxy.employee.last_name }} {{ proxy.employee.first_name }}{% if proxy.employee.middle_name %} {{ proxy.employee.middle_name }}{% endif %}</b>,
+      должность: <b>{{ proxy.employee.post }}</b>, представить интересы организации и получить материальные ценности у контрагента
+      <b>{{ proxy.customer.name }}</b>.
+    </p>
+
+    <p>
+      Паспорт: серия <b>{{ proxy.employee.passport_series }}</b> № <b>{{ proxy.employee.passport_number }}</b>,
+      выдан: <b>{{ proxy.employee.passport_issued_by }}</b>,
+      дата выдачи: <b>{{ proxy.employee.passport_date_of_issue|rusdate }}</b>.
+    </p>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th style="width: 8mm; text-align:center;">№</th>
+          <th>Наименование</th>
+          <th style="width: 25mm;">Ед. изм.</th>
+          <th style="width: 25mm; text-align:right;">Кол-во</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for it in proxy.items %}
+        <tr>
+          <td style="text-align:center;">{{ loop.index }}</td>
+          <td>{{ it.product.name }}</td>
+          <td>{{ it.product.unit.name }}</td>
+          <td style="text-align:right;">{{ it.amount }}</td>
+        </tr>
+      {% endfor %}
+      {% if proxy.items|length == 0 %}
+        <tr><td colspan="4"><small class="muted">Позиции отсутствуют</small></td></tr>
+      {% endif %}
+      </tbody>
+    </table>
+
+    <div class="signs">
+      <div>
+        Руководитель: {{ proxy.organization.chief }}
+        <div class="sign-line"></div>
+        <small>(подпись)</small>
+      </div>
+      <div>
+        Главный бухгалтер: {{ proxy.organization.financial_chief }}
+        <div class="sign-line"></div>
+        <small>(подпись)</small>
+      </div>
+    </div>
+
+    <p style="margin-top: 8mm;">
+      Подпись получателя: _______________________________________ / ________________________
+    </p>
+  </div>
+
+  <script>
+    // Если хочешь автопоказ диалога печати при открытии — раскомментируй.
+    // window.addEventListener('load', () => window.print());
+  </script>
+</body>
+</html>

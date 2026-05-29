@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Создать счёт</h2>
+<form method="post">
+  <label>Счёт<input name="account"></label>
+  <label>Банк<input name="bank_name"></label>
+  <label>БИК<input name="bank_identity_number"></label>
+  <div><button class="btn" type="submit">Сохранить</button></div>
+</form>
+{% endblock %}

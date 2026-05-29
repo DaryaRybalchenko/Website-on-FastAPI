@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="toolbar">
+  <h2>Справочник продукты</h2>
+  <a class="btn" href="/products/create">Создать</a>
+</div>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Название</th>
+      <th>Цена</th>
+      <th>Ед. изм.</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for item in products %}
+    <tr>
+      <td>{{ item.id }}</td>
+      <td>{{ item.name }}</td>
+      <td>{{ item.price }}</td>
+      <td>{{ item.unit.name if item.unit else '—' }}</td>
+      <td>
+        <a href="/products/{{ item.id }}/edit">✏️</a>
+        <a href="/products/{{ item.id }}/delete">🗑️</a>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

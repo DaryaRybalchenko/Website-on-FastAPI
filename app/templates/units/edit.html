@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Редактировать единицу #{{ item.id }}</h2>
+<form method="post">
+  <label>Название<input name="name" value="{{ item.name }}" required></label>
+  <div><button class="btn" type="submit">Сохранить</button></div>
+</form>
+{% endblock %}

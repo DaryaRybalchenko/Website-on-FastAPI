@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Редактировать организацию #{{ item.id }}</h2>
+<form method="post">
+  <label>Название<input name="name" value="{{ item.name }}"></label>
+  <label>Адрес<input name="address" value="{{ item.address }}"></label>
+
+  <label>Счёт
+    <select name="account_id">
+      <option value="" {% if not item.account_id %}selected{% endif %}>— не выбран —</option>
+      {% for acc in accounts %}
+        <option value="{{ acc.id }}" {% if item.account_id == acc.id %}selected{% endif %}>
+          {{ acc.account }} — {{ acc.bank_name }} (БИК {{ acc.bank_identity_number }})
+        </option>
+      {% endfor %}
+    </select>
+  </label>
+
+  <label>Руководитель<input name="chief" value="{{ item.chief }}"></label>
+  <label>Гл. бухгалтер<input name="financial_chief" value="{{ item.financial_chief }}"></label>
+  <div><button class="btn" type="submit">Сохранить</button></div>
+</form>
+{% endblock %}

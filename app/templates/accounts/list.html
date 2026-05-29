@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="toolbar">
+  <h2>Справочник счета</h2>
+  <a class="btn" href="/accounts/create">Создать</a>
+</div>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Счёт</th>
+      <th>Банк</th>
+      <th>БИК</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for item in accounts %}
+    <tr>
+      <td>{{ item.id }}</td>
+      <td>{{ item.account }}</td>
+      <td>{{ item.bank_name }}</td>
+      <td>{{ item.bank_identity_number }}</td>
+      <td>
+        <a href="/accounts/{{ item.id }}/edit">✏️</a>
+        <a href="/accounts/{{ item.id }}/delete">🗑️</a>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

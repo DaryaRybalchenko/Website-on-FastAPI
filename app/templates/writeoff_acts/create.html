@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Создать акт списания основных средств</h2>
+<form method="post">
+  <div class="grid">
+    <!-- Шапка документа -->
+    <label>Организация *
+      <select name="organization_id" required>
+        {% for org in orgs %}
+          <option value="{{ org.id }}">{{ org.name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <label>Номер акта *
+      <input type="text" name="act_number" required placeholder="АКТ-001">
+    </label>
+
+    <label>Дата акта *
+      <input type="date" name="act_date" required>
+    </label>
+
+    <label>Подразделение *
+      <select name="department_id" required>
+        {% for dept in depts %}
+          <option value="{{ dept.id }}">{{ dept.name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <label>Менеджер по закупкам *
+      <select name="created_by_id" required>
+        {% for emp in emps %}
+          <option value="{{ emp.id }}">{{ emp.last_name }} {{ emp.first_name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+  </div>
+
+  <h3>Комиссия</h3>
+  <div class="grid">
+    <label>Председатель комиссии *
+      <select name="commission_chairman_id" required>
+        {% for emp in emps %}
+          <option value="{{ emp.id }}">{{ emp.last_name }} {{ emp.first_name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <label>Член комиссии 1 *
+      <select name="commission_member1_id" required>
+        {% for emp in emps %}
+          <option value="{{ emp.id }}">{{ emp.last_name }} {{ emp.first_name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <label>Член комиссии 2
+      <select name="commission_member2_id">
+        <option value="">— не выбран —</option>
+        {% for emp in emps %}
+          <option value="{{ emp.id }}">{{ emp.last_name }} {{ emp.first_name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <label>Член комиссии 3
+      <select name="commission_member3_id">
+        <option value="">— не выбран —</option>
+        {% for emp in emps %}
+          <option value="{{ emp.id }}">{{ emp.last_name }} {{ emp.first_name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+  </div>
+
+  <h3>Списываемые основные средства</h3>
+  <table id="items-table">
+    <thead>
+      <tr>
+        <th>Основное средство *</th>
+        <th>Инвентарный номер *</th>
+        <th>Дата ввода в экспл. *</th>
+        <th>Первонач. стоимость *</th>
+        <th>Срок службы (мес.) *</th>
+        <th>Факт. срок экспл. (мес.) *</th>
+        <th>Остаточная стоимость *</th>
+        <th>Причина списания</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="items-body">
+      <tr>
+        <td>
+          <select name="product_id" required>
+            {% for prod in prods %}
+              <option value="{{ prod.id }}">{{ prod.name }}</option>
+            {% endfor %}
+          </select>
+        </td>
+        <td><input type="text" name="inventory_number" required placeholder="Инв-001"></td>
+        <td><input type="date" name="commissioning_date" required></td>
+        <td><input type="number" name="initial_cost" step="0.01" min="0" required value="0"></td>
+        <td><input type="number" name="useful_life" min="1" required value="60"></td>
+        <td><input type="number" name="actual_life" min="0" required value="0"></td>
+        <td><input type="number" name="residual_value" step="0.01" min="0" required value="0"></td>
+        <td>
+          <select name="item_reason">
+            <option value="">— не выбрана —</option>
+            <option value="Физический износ">Физический износ</option>
+            <option value="Моральное устаревание">Моральное устаревание</option>
+            <option value="Поломка, не подлежащая ремонту">Поломка, не подлежащая ремонту</option>
+            <option value="Утрата потребительских свойств">Утрата потребительских свойств</option>
+            <option value="Реализация">Реализация</option>
+            <option value="Безвозмездная передача">Безвозмездная передача</option>
+            <option value="Ликвидация при аварии">Ликвидация при аварии</option>
+            <option value="Несоответствие стандартам">Несоответствие стандартам</option>
+            <option value="Прочее">Прочее</option>
+          </select>
+        </td>
+        <td><button class="btn danger" type="button" onclick="removeRow(this)">✖</button></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="toolbar">
+    <button class="btn" type="button" onclick="addRow()">Добавить основное средство</button>
+  </div>
+
+  <div class="toolbar">
+    <button class="btn" type="submit">Создать акт списания</button>
+    <a class="btn" href="/writeoff-acts" style="background: var(--card);">Отмена</a>
+  </div>
+</form>
+
+<script>
+function addRow() {
+  const body = document.getElementById('items-body');
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td>
+      <select name="product_id" required>
+        {% for prod in prods %}
+          <option value="{{ prod.id }}">{{ prod.name }}</option>
+        {% endfor %}
+      </select>
+    </td>
+    <td><input type="text" name="inventory_number" required placeholder="Инв-001"></td>
+    <td><input type="date" name="commissioning_date" required></td>
+    <td><input type="number" name="initial_cost" step="0.01" min="0" required value="0"></td>
+    <td><input type="number" name="useful_life" min="1" required value="60"></td>
+    <td><input type="number" name="actual_life" min="0" required value="0"></td>
+    <td><input type="number" name="residual_value" step="0.01" min="0" required value="0"></td>
+    <td>
+      <select name="item_reason">
+        <option value="">— не выбрана —</option>
+        <option value="Физический износ">Физический износ</option>
+        <option value="Моральное устаревание">Моральное устаревание</option>
+        <option value="Поломка, не подлежащая ремонту">Поломка, не подлежащая ремонту</option>
+        <option value="Утрата потребительских свойств">Утрата потребительских свойств</option>
+        <option value="Безвозмездная передача">Безвозмездная передача</option>
+        <option value="Ликвидация при аварии">Ликвидация при аварии</option>
+        <option value="Несоответствие стандартам">Несоответствие стандартам</option>
+        <option value="Прочее">Прочее</option>
+      </select>
+    </td>
+    <td><button class="btn danger" type="button" onclick="removeRow(this)">✖</button></td>
+  `;
+  body.appendChild(tr);
+}
+
+function removeRow(btn) {
+  const tr = btn.closest('tr');
+  if (document.getElementById('items-body').children.length > 1) {
+    tr.parentNode.removeChild(tr);
+  }
+}
+
+// Автоматический расчет остаточной стоимости
+document.addEventListener('input', function(e) {
+  if (e.target.name === 'initial_cost' || e.target.name === 'useful_life' || e.target.name === 'actual_life') {
+    const row = e.target.closest('tr');
+    const initialCost = parseFloat(row.querySelector('input[name="initial_cost"]').value) || 0;
+    const usefulLife = parseInt(row.querySelector('input[name="useful_life"]').value) || 1;
+    const actualLife = parseInt(row.querySelector('input[name="actual_life"]').value) || 0;
+    
+    if (usefulLife > 0 && actualLife >= 0) {
+      const monthlyDepreciation = initialCost / usefulLife;
+      const residualValue = Math.max(0, initialCost - (monthlyDepreciation * actualLife));
+      row.querySelector('input[name="residual_value"]').value = residualValue.toFixed(2);
+    }
+  }
+});
+</script>
+
+<style>
+textarea {
+  width: 100%;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #27425f;
+  background: #0f1c29;
+  color: var(--text);
+  font-family: inherit;
+  resize: vertical;
+}
+#items-table th {
+  font-size: 0.9em;
+  padding: 5px;
+  white-space: nowrap;
+}
+#items-table td {
+  padding: 5px;
+}
+#items-table input, #items-table select {
+  font-size: 0.9em;
+  padding: 4px;
+  min-width: 0;
+}
+#items-table textarea {
+  font-size: 0.9em;
+  padding: 4px;
+  min-height: 40px;
+}
+</style>
+{% endblock %}

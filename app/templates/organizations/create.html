@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Создать организацию</h2>
+<form method="post">
+  <label>Название<input name="name"></label>
+  <label>Адрес<input name="address"></label>
+
+  <label>Счёт
+    <select name="account_id">
+      <option value="">— не выбран —</option>
+      {% for acc in accounts %}
+        <option value="{{ acc.id }}">{{ acc.account }} — {{ acc.bank_name }} (БИК {{ acc.bank_identity_number }})</option>
+      {% endfor %}
+    </select>
+  </label>
+
+  <label>Руководитель<input name="chief"></label>
+  <label>Гл. бухгалтер<input name="financial_chief"></label>
+  <div><button class="btn" type="submit">Сохранить</button></div>
+</form>
+{% endblock %}

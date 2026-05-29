@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Создать сотрудника</h2>
+<form method="post">
+  <label>Фамилия<input name="last_name" required></label>
+  <label>Имя<input name="first_name" required></label>
+  <label>Отчество<input name="middle_name"></label>
+  <label>Должность<input name="post" required></label>
+  
+  <!-- Добавьте это скрытое поле -->
+  <input type="hidden" name="post_id" value="1">
+  <!-- Или если post_id должен быть выбран: -->
+  <!-- <label>ID должности<input name="post_id" required></label> -->
+
+  <label>Серия паспорта<input name="passport_series" required></label>
+  <label>Номер паспорта<input name="passport_number" required></label>
+  <label>Кем выдан<input name="passport_issued_by" required></label>
+  <label>Дата выдачи<input type="date" name="passport_date_of_issue" required></label>
+
+  <div><button class="btn" type="submit">Сохранить</button></div>
+</form>
+{% endblock %}

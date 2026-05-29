@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Редактировать доверенность #{{ proxy.id }}</h2>
+<form method="post">
+  <div class="grid">
+    <label>Организация
+      <select name="organization_id" required>
+        {% for o in orgs %}
+          <option value="{{ o.id }}" {% if proxy.organization_id == o.id %}selected{% endif %}>{{ o.name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <label>Сотрудник
+      <select name="employee_id" required>
+        {% for e in emps %}
+          <option value="{{ e.id }}" {% if proxy.employee_id == e.id %}selected{% endif %}>
+            {{ e.last_name }} {{ e.first_name }} {{ e.middle_name }}
+          </option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <label>Контрагент
+      <select name="customer_id" required>
+        {% for c in custs %}
+          <option value="{{ c.id }}" {% if proxy.customer_id == c.id %}selected{% endif %}>{{ c.name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <label>Дата выдачи
+      <input type="date" name="date_of_issue" value="{{ proxy.date_of_issue }}" required>
+    </label>
+
+    <label>Действительна до
+      <input type="date" name="is_valid_until" value="{{ proxy.is_valid_until }}" required>
+    </label>
+  </div>
+
+  <h3>Позиции</h3>
+  <table id="items-table">
+    <thead>
+      <tr><th>Товар</th><th>Кол-во</th><th></th></tr>
+    </thead>
+    <tbody id="items-body">
+      {% for it in proxy.items %}
+      <tr>
+        <td>
+          <select name="product_id">
+            {% for p in prods %}
+              <option value="{{ p.id }}" {% if it.product_id == p.id %}selected{% endif %}>
+                {{ p.name }} ({{ p.unit.name }})
+              </option>
+            {% endfor %}
+          </select>
+        </td>
+        <td><input type="number" name="amount" min="1" step="1" value="{{ it.amount }}"></td>
+        <td><button class="btn danger" type="button" onclick="removeRow(this)">✖</button></td>
+      </tr>
+      {% endfor %}
+      {% if proxy.items|length == 0 %}
+      <tr>
+        <td>
+          <select name="product_id">
+            {% for p in prods %}
+              <option value="{{ p.id }}">{{ p.name }} ({{ p.unit.name }})</option>
+            {% endfor %}
+          </select>
+        </td>
+        <td><input type="number" name="amount" min="1" step="1"></td>
+        <td><button class="btn danger" type="button" onclick="removeRow(this)">✖</button></td>
+      </tr>
+      {% endif %}
+    </tbody>
+  </table>
+
+  <div class="toolbar">
+    <button class="btn" type="button" onclick="addRow()">Добавить строку</button>
+  </div>
+
+  <button class="btn" type="submit">Сохранить</button>
+</form>
+
+<script>
+function addRow() {
+  const body = document.getElementById('items-body');
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td>
+      <select name="product_id">
+        {% for p in prods %}
+          <option value="{{ p.id }}">{{ p.name }} ({{ p.unit.name }})</option>
+        {% endfor %}
+      </select>
+    </td>
+    <td><input type="number" name="amount" min="1" step="1"></td>
+    <td><button class="btn danger" type="button" onclick="removeRow(this)">✖</button></td>
+  `;
+  body.appendChild(tr);
+}
+function removeRow(btn) {
+  const tr = btn.closest('tr');
+  tr.parentNode.removeChild(tr);
+}
+</script>
+{% endblock %}

@@ -1,0 +1,71 @@
+/* A4, поля и базовая типографика */
+@page {
+  size: A4;
+  margin: 20mm 15mm 20mm 15mm;
+}
+* { box-sizing: border-box; }
+html, body {
+  background: #fff;
+  color: #000;
+  font: 12pt "Times New Roman", serif;
+  line-height: 1.35;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.container-doc {
+  max-width: 180mm;
+  margin: 0 auto;
+}
+.doc-title {
+  text-align: center;
+  font-weight: 700;
+  font-size: 16pt;
+  margin-bottom: 6mm;
+  text-transform: uppercase;
+}
+.meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3mm 8mm;
+  margin-bottom: 6mm;
+}
+label { font-weight: 600; }
+.value { border-bottom: 1px solid #000; display: inline-block; min-width: 40mm; }
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 4mm;
+}
+.table th, .table td {
+  border: 1px solid #000;
+  padding: 2mm 3mm;
+}
+.table th { text-align: left; }
+.signs {
+  margin-top: 12mm;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10mm;
+}
+.sign-line {
+  margin-top: 10mm;
+  border-top: 1px solid #000;
+  height: 0;
+}
+small.muted { color: #333; }
+
+/* экранный режим — кнопка печати видима; в принте скрыта */
+.screen-toolbar {
+  margin: 10px 0 20px;
+}
+.screen-toolbar .btn {
+  display: inline-block;
+  padding: 6px 10px;
+  border: 1px solid #000;
+  background: #fff;
+  color: #000;
+  text-decoration: none;
+}
+@media print {
+  .screen-toolbar { display: none; }
+}

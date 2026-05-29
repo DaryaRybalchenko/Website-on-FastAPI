@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ title or "Документы (Доверенность & Акты списания)" }}</title>
+  <link rel="stylesheet" href="/static/css/theme.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    /* Убираем подчеркивания у всех ссылок */
+    a {
+      text-decoration: none;
+      color: #007BFF; /* цвет ссылок */
+      transition: color 0.2s, background-color 0.2s;
+    }
+
+    nav {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .nav-group {
+      position: relative;
+    }
+
+    .nav-group h2 {
+      margin: 0;
+      font-size: 16px;
+      cursor: pointer;
+      color: #007BFF;
+    }
+
+    .nav-group a {
+      display: block;
+      padding: 5px 10px;
+      border-radius: 3px;
+    }
+
+    /* Скрываем подменю по умолчанию */
+    .nav-group .submenu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #f8f8f8;
+      padding: 5px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      z-index: 10;
+      min-width: 150px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    /* Показываем подменю при наведении */
+    .nav-group:hover .submenu {
+      display: block;
+    }
+
+    /* Hover эффект для ссылок в подменю */
+    .nav-group .submenu a:hover {
+      background-color: #1e3248;
+      color: #fff;
+    }
+
+    /* Горизонтальная главная ссылка */
+    nav > a {
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 3px;
+    }
+
+    nav > a:hover {
+      background-color: #007BFF;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header class="container">
+    <h1>Документы (Доверенность & Акт списания) — FastAPI</h1>
+    <nav>
+      <a href="/">Главная</a>
+
+      <div class="nav-group">
+        <h2>Справочники </h2>
+        <div class="submenu">
+          <a href="/organizations">Организации</a>
+          <a href="/departments">Отделы</a>
+          <a href="/employees">Сотрудники</a>
+          <a href="/positions">Должности</a>
+          <a href="/customers">Контрагенты</a>
+          <a href="/products">Товары</a>
+          <a href="/units">Ед. изм.</a>
+          <a href="/accounts">Счета</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <h2>Документы </h2>
+        <div class="submenu">
+          <a href="/proxies">Доверенности</a>
+          <a href="/writeoff-acts">Акты списания ОС</a>
+          <a href="/writeoff-acts/create" class="btn">➕ Акт списания</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="container muted">© {{ now().year }}</footer>
+</body>
+</html>

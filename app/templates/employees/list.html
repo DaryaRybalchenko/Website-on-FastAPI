@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="toolbar">
+  <h2>Справочник сотрудники</h2>
+  <a class="btn" href="/employees/create">Создать</a>
+</div>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Фамилия</th>
+      <th>Имя</th>
+      <th>Отчество</th>
+      <th>Должность</th>
+      <th>Паспорт</th>
+      <th>Дата выдачи</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for item in employees %}
+    <tr>
+      <td>{{ item.id }}</td>
+      <td>{{ item.last_name }}</td>
+      <td>{{ item.first_name }}</td>
+      <td>{{ item.middle_name or '' }}</td>
+      <td>{{ item.post }}</td>
+      <td>{{ item.passport_series }} {{ item.passport_number }} ({{ item.passport_issued_by }})</td>
+      <td>{{ item.passport_date_of_issue }}</td>
+      <td>
+        <a href="/employees/{{ item.id }}/edit">✏️</a>
+        <a href="/employees/{{ item.id }}/delete">🗑️</a>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
